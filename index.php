@@ -1,40 +1,63 @@
+<?php
+session_start();
+
+/* pevné přihlašovací údaje */
+$fixedUser = "admin";
+$fixedPass = "1234";
+
+/* LOGOUT */
+if (isset($_GET["logout"])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
+
+/* LOGIN */
+$error = "";
+
+if (isset($_POST["uname"], $_POST["psw"])) {
+    if ($_POST["uname"] === $fixedUser && $_POST["psw"] === $fixedPass) {
+        $_SESSION["uname"] = $_POST["uname"];
+    } else {
+        $error = "Špatné jméno nebo heslo.";
+    }
+}
+?>  
 <!DOCTYPE html>
-<html>
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Tabulka</title>
+    <title>Login</title>
 </head>
 <body>
 
-<form method="post">
-    Řádky: <input type="number" name="row" min="1"><br>
-    Sloupce: <input type="number" name="col" min="1"><br>
-    <input type="submit" value="Vytvořit tabulku">
-</form>
+<?php if (isset($_SESSION["uname"])): ?>
 
-<?php
-// DŮLEŽITÉ: nejdřív zkontrolovat, jestli existují
-$row = isset($_POST["row"]) ? (int)$_POST["row"] : 0;
-$col = isset($_POST["col"]) ? (int)$_POST["col"] : 0;
+    <h2>Přihlášen jako <?= $_SESSION["uname"] ?></h2>
+    <a href="?logout=1">Odhlásit se</a>
 
-if ($row > 0 && $col > 0) {
+<?php else: ?>
 
-    echo "<table border='2'>";
+    <h2>Přihlášení</h2>
 
-    for ($i = 0; $i < $row; $i++) {
-        echo "<tr>";
-        for ($j = 0; $j < $col; $j++) {
-            echo "<td>$i.$j</td>";
-        }
-        echo "</tr>";
-    }
+    <?php if ($error): ?>
+        <p style="color:red;"><?= $error ?></p>
+    <?php endif; ?>
 
-    echo "</table>";
+    <form method="post">
+        <input type="text" name="uname" placeholder="Uživatelské jméno" required><br><br>
+        <input type="password" name="psw" placeholder="Heslo" required><br><br>
 
-} elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
-    echo "Zadej platné hodnoty.";
-}
-?>
+        <label>
+            <input type="checkbox" name="remember">
+            Pamatovat si mě
+        </label><br><br>
+
+        <button type="submit">Přihlásit</button>
+    </form>
+
+<?php endif; ?>
 
 </body>
 </html>
