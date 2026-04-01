@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat App</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: auto; }
+    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Chat</h2>
+  <input id="name" placeholder="Jméno"><br>
+  <input id="room" placeholder="Roomka"><br>
+  <div id="chat"></div>
+  <input id="message" placeholder="Zpráva">
+  <button onclick="sendMessage()">Odeslat</button>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
